@@ -67,8 +67,8 @@ tigerbot:
 #  prompt: 你是智能聊天机器人，你叫wcferry。请用这个角色回答我的问题 # 根据需要对角色进行设定
 
 # Dall-e 图片生成
-# 目前预设的是azure版本
-# DALLE:
+# 目前预设的是azure版本, 没测试过其他版本
+# dalle:
 #  key: 填写你key
 #  api: https://{资源名称}.openai.azure.com/
 #  version: 2023-06-01-preview
