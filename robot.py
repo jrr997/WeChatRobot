@@ -194,6 +194,15 @@ class Robot(Job):
             self.LOG.info(f"To {receiver}: {ats}\r{msg}")
             self.wcf.send_text(f"{ats}\n\n{msg}", receiver, at_list)
 
+    def sendImageMsg(self, msg: str, receiver: str) -> None:
+        """ 发送消息
+        :param msg: 消息字符串
+        :param receiver: 接收人wxid或者群id
+        :param at_list: 要@的wxid, @所有人的wxid为：nofity@all
+        """
+        self.LOG.info(f"To {receiver}: {msg}")
+        self.wcf.send_image(msg, receiver)
+
     def getAllContacts(self) -> dict:
         """
         获取联系人（包括好友、公众号、服务号、群成员……）
@@ -250,4 +259,5 @@ class Robot(Job):
         if image_url == False:
             self.sendTextMsg("生成图片失败", msg.roomid, msg.sender)
         else:
-            self.sendTextMsg(image_url, msg.roomid, msg.sender)
+            self.sendTextMsg("生成成功", msg.roomid, msg.sender)
+            self.sendImageMsg(image_url, msg.roomid)
