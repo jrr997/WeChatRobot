@@ -32,6 +32,7 @@ class Robot(Job):
 
         if self.config.DALLE:
             dalle_cfg = self.config.DALLE
+            print(dalle_cfg)
             self.dalle = DALLE(dalle_cfg.get("api"), dalle_cfg.get("key"), dalle_cfg.get("version"), dalle_cfg.get("type"))
 
         if self.config.TIGERBOT:
