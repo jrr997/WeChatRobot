@@ -115,7 +115,7 @@ class Robot(Job):
 
             if msg.is_at(self.wxid):   # 被@
                 self.toAt(msg)
-            elif self.dalle & self.msg_is_gen_image(msg):
+            elif self.dalle and self.msg_is_gen_image(msg):
                 self.gen_image(msg)
             else:                # 其他消息
                 self.toChengyu(msg)
