@@ -15,6 +15,7 @@ from func_chengyu import cy
 from func_news import News
 from func_tigerbot import TigerBot
 from func_xinghuo_web import XinghuoWeb
+from func_dalle import DALLE
 from job_mgmt import Job
 
 
@@ -28,6 +29,10 @@ class Robot(Job):
         self.LOG = logging.getLogger("Robot")
         self.wxid = self.wcf.get_self_wxid()
         self.allContacts = self.getAllContacts()
+
+        if self.config.DALLE:
+            dalle_cfg = self.config.DALLE
+            self.dalle = DALLE(dalle_cfg.get("api"), dalle_cfg.get("key"), dalle_cfg.get("version"), dalle_cfg.get("type"))
 
         if self.config.TIGERBOT:
             self.chat = TigerBot(self.config.TIGERBOT)
@@ -110,7 +115,8 @@ class Robot(Job):
 
             if msg.is_at(self.wxid):   # 被@
                 self.toAt(msg)
-
+            elif self.dalle & self.msg_is_gen_image(msg):
+                self.gen_image(msg)
             else:                # 其他消息
                 self.toChengyu(msg)
 
@@ -226,3 +232,18 @@ class Robot(Job):
         news = News().get_important_news()
         for r in receivers:
             self.sendTextMsg(news, r)
+
+    def msg_is_gen_image(self, msg: WxMsg) -> bool:
+        """判断消息是否为生成图片
+        """
+        return True if msg.content.startswith("#AI画图 ") else False
+    
+    def gen_image(self, msg: WxMsg) -> None:
+        """生成图片
+        """
+        DALLETxt = msg.content.replace("#AI画图 ", "")
+        image_url = self.dalle.generate_images(DALLETxt)
+        if image_url == False:
+            self.sendTextMsg("生成图片失败", msg.roomid, msg.sender)
+        else:
+            self.sendTextMsg(image_url, msg.roomid, msg.sender)
