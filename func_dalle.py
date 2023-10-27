@@ -8,7 +8,7 @@ class DALLE:
         openai.api_version = version
         openai.api_key = key
 
-  def generate_images(self, prompt) -> str | False:
+  def generate_images(self, prompt):
     try:
       response = openai.Image.create(
       prompt=prompt,
